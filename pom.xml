@@ -19,12 +19,13 @@
 	</properties>
 
 	<dependencies>
+		<!-- ftp -->
 		<dependency>
 			<groupId>commons-net</groupId>
 			<artifactId>commons-net</artifactId>
 			<version>3.3</version>
 		</dependency>
-
+		<!-- sftp -->
 		<dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
