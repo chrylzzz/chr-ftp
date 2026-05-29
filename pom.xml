@@ -19,6 +19,11 @@
 	</properties>
 
 	<dependencies>
+		<!-- 连接池 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+		</dependency>
 		<!-- ftp -->
 		<dependency>
 			<groupId>commons-net</groupId>
@@ -26,12 +31,16 @@
 			<version>3.3</version>
 		</dependency>
 		<!-- sftp -->
+<!--		<dependency>-->
+<!--			<groupId>com.jcraft</groupId>-->
+<!--			<artifactId>jsch</artifactId>-->
+<!--			<version>0.1.54</version>-->
+<!--		</dependency>-->
 		<dependency>
-			<groupId>com.jcraft</groupId>
+			<groupId>com.github.mwiede</groupId>
 			<artifactId>jsch</artifactId>
-			<version>0.1.54</version>
+			<version>0.2.10</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
