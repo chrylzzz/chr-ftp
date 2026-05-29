@@ -1,9 +1,7 @@
 package com.chryl.controller;
 
 import com.chryl.util.SftpUtil2026;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -17,6 +15,7 @@ import java.util.UUID;
 
 
 @RestController
+@RequestMapping("sftp")
 public class SftpController {
 
     @Resource
@@ -28,7 +27,7 @@ public class SftpController {
      * @param file 前端传的文件
      * @return 结果
      */
-    @GetMapping("/sftp/upload")
+    @GetMapping("/upload")
     public String upload(@RequestParam("file") MultipartFile file) {
 
         try {
@@ -54,7 +53,32 @@ public class SftpController {
             e.printStackTrace();
             return "上传失败：" + e.getMessage();
         }
+    }
 
+
+    /**
+     * 删除 SFTP 服务器上的文件
+     *
+     * @param filePath 要删除的文件路径（例：/home/upload/test.txt）
+     * @return 删除结果
+     */
+    @DeleteMapping("/delete")
+    public String deleteFile(@RequestParam("filePath") String filePath) {
+        try {
+            // 1. 路径判空
+            if (filePath == null || filePath.trim().isEmpty()) {
+                return "文件路径不能为空";
+            }
+
+            // 2. 调用工具类删除
+            sftpUtil.delete(filePath);
+
+            return "删除成功：" + filePath;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "删除失败：" + e.getMessage();
+        }
     }
 
 }
