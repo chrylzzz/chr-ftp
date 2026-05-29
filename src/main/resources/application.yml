@@ -1,6 +1,6 @@
 #
 server:
-  port: 8877
+  port: 9018
   servlet:
     context-path: /chr-ftp
 spring:
