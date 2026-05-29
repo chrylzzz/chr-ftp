@@ -1,6 +1,10 @@
 package com.chryl.controller;
 
 import com.chryl.util.SftpUtil2026;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpATTRS;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,22 +67,46 @@ public class SftpController {
      * @return 删除结果
      */
     @DeleteMapping("/delete")
-    public String deleteFile(@RequestParam("filePath") String filePath) {
+    public String deleteFile(@RequestParam("filePath") String filePath) throws JSchException {
+        ChannelSftp sftp = null;
+
         try {
             // 1. 路径判空
-            if (filePath == null || filePath.trim().isEmpty()) {
-                return "文件路径不能为空";
+            if (StringUtils.isBlank(filePath)) {
+                return "错误：文件路径不能为空";
             }
 
-            // 2. 调用工具类删除
-            sftpUtil.delete(filePath);
+            // 2. 获取连接
+            sftp = sftpUtil.getChannel();
+
+            // 3. 判断文件是否存在（controller 里判断）
+            SftpATTRS attrs;
+            try {
+                attrs = sftp.lstat(filePath);
+            } catch (Exception e) {
+                return "错误：文件不存在 → " + filePath;
+            }
+
+            // 4. 如果是目录，不让删（安全控制）
+            if (attrs.isDir()) {
+                return "错误：不能删除目录 → " + filePath;
+            }
+
+            // 5. 执行删除
+            sftp.rm(filePath);
 
             return "删除成功：" + filePath;
 
         } catch (Exception e) {
             e.printStackTrace();
             return "删除失败：" + e.getMessage();
+        } finally {
+            // 关闭连接
+            if (sftp != null) {
+                sftpUtil.disconnect(sftp);
+            }
         }
+
     }
 
 }
