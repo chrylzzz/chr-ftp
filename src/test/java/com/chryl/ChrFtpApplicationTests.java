@@ -1,13 +1,15 @@
 package com.chryl;
 
-import org.junit.jupiter.api.Test;
+
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ChrFtpApplicationTests {
+public class ChrFtpApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
+		System.out.println("11213131231231231");
 	}
 
 }

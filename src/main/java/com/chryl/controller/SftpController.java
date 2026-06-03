@@ -46,7 +46,7 @@ public class SftpController {
             String uuidFileName = UUID.randomUUID() + suffix;
 
             // 3. SFTP 服务端路径（自己改）
-            String remotePath = "/home/upload/" + uuidFileName;
+            String remotePath = "/sftp/sftpuser/upload/" + uuidFileName;
 
             // 4. 直接用文件流上传到 SFTP
             sftpUtil.upload(remotePath, file.getInputStream());
