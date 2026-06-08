@@ -104,4 +104,17 @@ public class SftpUtil2026 {
             disconnect(channel);
         }
     }
+
+    /**
+     * 判断目录是否存在，不存在则创建
+     */
+    private void checkAndCreateDir(ChannelSftp sftp, String dirPath) throws Exception {
+        try {
+            // 1. 尝试查看目录信息 → 存在就直接跳过
+            sftp.stat(dirPath);
+        } catch (Exception e) {
+            // 2. 不存在 → 创建目录
+            sftp.mkdir(dirPath);
+        }
+    }
 }

@@ -25,15 +25,22 @@ public class SftpController {
     @Resource
     private SftpUtil2026 sftpUtil;
 
+
+    @GetMapping("test")
+    public String show() {
+        String res = "success";
+        return res;
+    }
+
     /**
      * 文件上传到 SFTP
      *
      * @param file 前端传的文件
      * @return 结果
      */
-    @GetMapping("/upload")
+    @GetMapping("upload")
     public String upload(@RequestParam("file") MultipartFile file) {
-
+        ChannelSftp sftp = null;
         try {
             // 1. 判空
             if (file.isEmpty()) {
@@ -45,8 +52,20 @@ public class SftpController {
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
             String uuidFileName = UUID.randomUUID() + suffix;
 
+            // 4. 获取连接
+            sftp = sftpUtil.getChannel();
+
+            String remoteDir = "/data/SFTP/sftp/chryl/upload/";
+            // 5. 自动创建目录（解决报错 2: No such file）
+            try {
+                sftp.stat(remoteDir);
+            } catch (Exception e) {
+                // 目录不存在就递归创建
+                sftp.mkdir(remoteDir);
+            }
+
             // 3. SFTP 服务端路径（自己改）
-            String remotePath = "/sftp/sftpuser/upload/" + uuidFileName;
+            String remotePath = remoteDir + uuidFileName;
 
             // 4. 直接用文件流上传到 SFTP
             sftpUtil.upload(remotePath, file.getInputStream());
@@ -66,7 +85,7 @@ public class SftpController {
      * @param filePath 要删除的文件路径（例：/home/upload/test.txt）
      * @return 删除结果
      */
-    @DeleteMapping("/delete")
+    @DeleteMapping("delete")
     public String deleteFile(@RequestParam("filePath") String filePath) throws JSchException {
         ChannelSftp sftp = null;
 

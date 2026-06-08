@@ -13,8 +13,8 @@ spring:
 
 # sftp
 sftp:
-  host: 10.40.171.13
-  port: 2233
+  host: 10.40.137.102
+  port: 9003
   username: sftpuser
   password: b3mr~N_ptFDx
   session-timeout: 30000 # 会话超时
